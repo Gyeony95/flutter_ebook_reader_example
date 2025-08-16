@@ -51,6 +51,9 @@ dependencies:
   
   # File operations
   path_provider: ^2.1.5
+  
+  # 폰트 변경용
+  google_fonts: ^6.2.1
 
 dev_dependencies:
   flutter_test:

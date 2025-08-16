@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/app_state.dart';
 import '../models/book.dart';
 import '../services/favorites_service.dart';
+import '../services/settings_service.dart';
 
 class AppStateNotifier extends StateNotifier<AppState> {
   AppStateNotifier() : super(const AppState(books: [], favorites: [])) {
@@ -14,14 +15,20 @@ class AppStateNotifier extends StateNotifier<AppState> {
       final futures = await Future.wait([
         FavoritesService.loadFavorites(),
         EpubService.loadEpubBooks(),
+        SettingsService.loadFontSize(),
+        SettingsService.loadFontFamily(),
       ]);
       
       final favorites = futures[0] as List<String>;
       final books = futures[1] as List<Book>;
+      final fontSize = futures[2] as double;
+      final fontFamily = futures[3] as String;
       
       state = AppState(
         books: books,
         favorites: favorites,
+        fontSize: fontSize,
+        fontFamily: fontFamily,
       );
     } catch (e) {
       state = const AppState(
@@ -59,6 +66,16 @@ class AppStateNotifier extends StateNotifier<AppState> {
     }
     
     state = state.copyWith(favorites: newFavorites);
+  }
+
+  Future<void> setFontSize(double fontSize) async {
+    state = state.copyWith(fontSize: fontSize);
+    await SettingsService.saveFontSize(fontSize);
+  }
+
+  Future<void> setFontFamily(String fontFamily) async {
+    state = state.copyWith(fontFamily: fontFamily);
+    await SettingsService.saveFontFamily(fontFamily);
   }
 
   Book? getBookById(String id) {
@@ -110,4 +127,13 @@ final bookByIdProvider = Provider.family<Book?, String>((ref, id) {
 // Provider for checking if a book is favorite
 final isFavoriteProvider = Provider.family<bool, String>((ref, bookId) {
   return ref.watch(appStateProvider).isFavorite(bookId);
+});
+
+// Provider for font settings
+final fontSizeProvider = Provider<double>((ref) {
+  return ref.watch(appStateProvider).fontSize;
+});
+
+final fontFamilyProvider = Provider<String>((ref) {
+  return ref.watch(appStateProvider).fontFamily;
 });

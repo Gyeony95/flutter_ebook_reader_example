@@ -7,6 +7,8 @@ class AppState {
   final String searchQuery;
   final Book? selectedBook;
   final int currentPage;
+  final double fontSize;
+  final String fontFamily;
 
   const AppState({
     required this.books,
@@ -14,6 +16,8 @@ class AppState {
     this.searchQuery = '',
     this.selectedBook,
     this.currentPage = 0,
+    this.fontSize = 16.0,
+    this.fontFamily = 'default',
   });
 
   AppState copyWith({
@@ -22,6 +26,8 @@ class AppState {
     String? searchQuery,
     Book? selectedBook,
     int? currentPage,
+    double? fontSize,
+    String? fontFamily,
   }) {
     return AppState(
       books: books ?? this.books,
@@ -29,6 +35,8 @@ class AppState {
       searchQuery: searchQuery ?? this.searchQuery,
       selectedBook: selectedBook ?? this.selectedBook,
       currentPage: currentPage ?? this.currentPage,
+      fontSize: fontSize ?? this.fontSize,
+      fontFamily: fontFamily ?? this.fontFamily,
     );
   }
 
@@ -39,6 +47,8 @@ class AppState {
       searchQuery: searchQuery,
       selectedBook: null,
       currentPage: 0,
+      fontSize: fontSize,
+      fontFamily: fontFamily,
     );
   }
 
@@ -67,7 +77,9 @@ class AppState {
         _listEquals(favorites, other.favorites) &&
         searchQuery == other.searchQuery &&
         selectedBook == other.selectedBook &&
-        currentPage == other.currentPage;
+        currentPage == other.currentPage &&
+        fontSize == other.fontSize &&
+        fontFamily == other.fontFamily;
   }
 
   @override
@@ -77,11 +89,13 @@ class AppState {
         searchQuery,
         selectedBook,
         currentPage,
+        fontSize,
+        fontFamily,
       );
 
   @override
   String toString() {
-    return 'AppState(books: ${books.length}, favorites: ${favorites.length}, searchQuery: $searchQuery, selectedBook: ${selectedBook?.title}, currentPage: $currentPage)';
+    return 'AppState(books: ${books.length}, favorites: ${favorites.length}, searchQuery: $searchQuery, selectedBook: ${selectedBook?.title}, currentPage: $currentPage, fontSize: $fontSize, fontFamily: $fontFamily)';
   }
 }
 

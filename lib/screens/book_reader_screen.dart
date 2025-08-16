@@ -2,8 +2,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../models/book.dart';
 import '../providers/app_state_provider.dart';
+import '../widgets/reading_settings_drawer.dart';
 
 class BookReaderScreen extends ConsumerStatefulWidget {
   final String bookId;
@@ -23,6 +25,7 @@ class _BookReaderScreenState extends ConsumerState<BookReaderScreen>
   Timer? _hideControlsTimer;
   late AnimationController _fadeController;
   late Animation<double> _fadeAnimation;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -110,12 +113,43 @@ class _BookReaderScreenState extends ConsumerState<BookReaderScreen>
     }
   }
 
+  TextStyle _getTextStyle(TextStyle? baseStyle, double fontSize, String fontFamily) {
+    if (fontFamily == 'default') {
+      return baseStyle?.copyWith(fontSize: fontSize, height: 1.8) ?? 
+             TextStyle(fontSize: fontSize, height: 1.8);
+    }
+    
+    switch (fontFamily) {
+      case 'noto_sans_kr':
+        return GoogleFonts.notoSansKr(
+          textStyle: baseStyle?.copyWith(fontSize: fontSize, height: 1.8),
+        );
+      case 'noto_serif_kr':
+        return GoogleFonts.notoSerifKr(
+          textStyle: baseStyle?.copyWith(fontSize: fontSize, height: 1.8),
+        );
+      case 'nanum_gothic':
+        return GoogleFonts.nanumGothic(
+          textStyle: baseStyle?.copyWith(fontSize: fontSize, height: 1.8),
+        );
+      case 'nanum_myeongjo':
+        return GoogleFonts.nanumMyeongjo(
+          textStyle: baseStyle?.copyWith(fontSize: fontSize, height: 1.8),
+        );
+      default:
+        return baseStyle?.copyWith(fontSize: fontSize, height: 1.8) ?? 
+               TextStyle(fontSize: fontSize, height: 1.8);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final book = ref.watch(bookByIdProvider(widget.bookId));
     final currentPage = ref.watch(currentPageProvider);
     final isFavorite = ref.watch(isFavoriteProvider(widget.bookId));
+    final fontSize = ref.watch(fontSizeProvider);
+    final fontFamily = ref.watch(fontFamilyProvider);
 
     if (book == null) {
       return Scaffold(
@@ -140,6 +174,8 @@ class _BookReaderScreenState extends ConsumerState<BookReaderScreen>
     final progress = ((currentPage + 1) / book.content.length) * 100;
     
     return Scaffold(
+      key: _scaffoldKey,
+      endDrawer: const ReadingSettingsDrawer(),
       body: Stack(
         children: [
           // Reading area
@@ -185,10 +221,7 @@ class _BookReaderScreenState extends ConsumerState<BookReaderScreen>
                         opacity: _fadeAnimation,
                         child: Text(
                           book.content[currentPage],
-                          style: theme.textTheme.bodyLarge?.copyWith(
-                            height: 1.8,
-                            fontSize: 16,
-                          ),
+                          style: _getTextStyle(theme.textTheme.bodyLarge, fontSize, fontFamily),
                           textAlign: TextAlign.justify,
                         ),
                       ),
@@ -270,7 +303,7 @@ class _BookReaderScreenState extends ConsumerState<BookReaderScreen>
                           ),
                           
                           IconButton(
-                            onPressed: () {},
+                            onPressed: () => _scaffoldKey.currentState?.openEndDrawer(),
                             icon: const Icon(Icons.settings),
                             iconSize: 20,
                           ),

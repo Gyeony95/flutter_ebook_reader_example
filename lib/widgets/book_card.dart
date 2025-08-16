@@ -30,7 +30,7 @@ class BookCard extends ConsumerWidget {
           children: [
             // Book cover image with favorite button overlay
             Expanded(
-              flex: 3,
+              flex: 3, 
               child: Stack(
                 children: [
                   // Book cover image
