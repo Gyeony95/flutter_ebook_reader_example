@@ -1,11 +1,13 @@
+import 'dart:typed_data';
 import '../../domain/entities/book.dart';
+import 'package:image/image.dart' as img;
 
 class BookModel extends Book {
   const BookModel({
     required super.id,
     required super.title,
     required super.author,
-    required super.coverImagePath,
+    required super.coverImage,
     required super.publishYear,
     required super.content,
   });
@@ -15,7 +17,7 @@ class BookModel extends Book {
       id: json['id'] as String,
       title: json['title'] as String,
       author: json['author'] as String,
-      coverImagePath: json['coverImagePath'] as String,
+      coverImage: json['coverImage'] as img.Image,
       publishYear: json['publishYear'] as int,
       content: List<String>.from(json['content'] as List),
     );
@@ -26,7 +28,7 @@ class BookModel extends Book {
       'id': id,
       'title': title,
       'author': author,
-      'coverImagePath': coverImagePath,
+      'coverImage': coverImage,
       'publishYear': publishYear,
       'content': content,
     };
@@ -37,7 +39,7 @@ class BookModel extends Book {
       id: book.id,
       title: book.title,
       author: book.author,
-      coverImagePath: book.coverImagePath,
+      coverImage: book.coverImage,
       publishYear: book.publishYear,
       content: book.content,
     );

@@ -1,3 +1,4 @@
+import 'dart:typed_data';
 import 'package:epubx/epubx.dart';
 import 'package:flutter/services.dart';
 import '../models/book_model.dart';
@@ -24,13 +25,9 @@ class EpubDatasourceImpl implements EpubDatasource {
 
           String title = epubBook.Title ?? 'Unknown Title';
           String author = epubBook.Author ?? 'Unknown Author';
-          
+          Image? coverImage = epubBook.CoverImage;
+
           final fileName = assetPath.split('/').last.replaceAll('.epub', '');
-          final parts = fileName.split(' - ');
-          if (parts.length >= 2) {
-            title = parts[0].trim();
-            author = parts[1].trim();
-          }
 
           final List<String> content = [];
           for (final chapter in epubBook.Chapters ?? <EpubChapter>[]) {
@@ -51,7 +48,7 @@ class EpubDatasourceImpl implements EpubDatasource {
             id: fileName,
             title: title,
             author: author,
-            coverImagePath: assetPath,
+            coverImage: coverImage,
             publishYear: 2024,
             content: content,
           );
@@ -88,4 +85,5 @@ class EpubDatasourceImpl implements EpubDatasource {
     
     return pages;
   }
+
 }

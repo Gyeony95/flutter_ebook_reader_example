@@ -1,8 +1,11 @@
+import 'dart:typed_data';
+import 'package:image/image.dart' as img;
+
 class Book {
   final String id;
   final String title;
   final String author;
-  final String coverImagePath;
+  final img.Image? coverImage;
   final int publishYear;
   final List<String> content;
 
@@ -10,13 +13,14 @@ class Book {
     required this.id,
     required this.title,
     required this.author,
-    required this.coverImagePath,
+    required this.coverImage,
     required this.publishYear,
     required this.content,
   });
 
-  String get coverImage => coverImagePath;
-  bool get isEpub => coverImagePath.endsWith('.epub');
+  Uint8List? get coverImageBytes => coverImage != null
+      ? Uint8List.fromList(img.encodePng(coverImage!))
+      : null;
 
   @override
   bool operator ==(Object other) {

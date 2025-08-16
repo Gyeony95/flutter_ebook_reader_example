@@ -8,16 +8,13 @@ import '../providers/app_providers.dart';
 class BookCard extends ConsumerWidget {
   final Book book;
 
-  const BookCard({
-    super.key,
-    required this.book,
-  });
+  const BookCard({super.key, required this.book});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final isFavorite = ref.watch(isFavoriteProvider(book.id));
-    
+
     return Card(
       clipBehavior: Clip.antiAlias,
       child: InkWell(
@@ -30,7 +27,7 @@ class BookCard extends ConsumerWidget {
           children: [
             // Book cover image with favorite button overlay
             Expanded(
-              flex: 3, 
+              flex: 3,
               child: Stack(
                 children: [
                   // Book cover image
@@ -39,26 +36,18 @@ class BookCard extends ConsumerWidget {
                     decoration: BoxDecoration(
                       color: theme.colorScheme.surfaceContainerHighest,
                     ),
-                    child: CachedNetworkImage(
-                      imageUrl: book.coverImage,
-                      fit: BoxFit.cover,
-                      placeholder: (context, url) => Container(
-                        color: theme.colorScheme.surfaceContainerHighest,
-                        child: const Center(
-                          child: CircularProgressIndicator(strokeWidth: 2),
-                        ),
-                      ),
-                      errorWidget: (context, url, error) => Container(
-                        color: theme.colorScheme.surfaceContainerHighest,
-                        child: Icon(
-                          Icons.book,
-                          color: theme.colorScheme.onSurfaceVariant,
-                          size: 32,
-                        ),
-                      ),
-                    ),
+                    child: book.coverImage != null
+                        ? Image.memory(
+                            book.coverImageBytes!,
+                            fit: BoxFit.cover,
+                            width: double.infinity,
+                            height: double.infinity,
+                            errorBuilder: (context, error, stackTrace) =>
+                                _buildFallbackCover(theme),
+                          )
+                        : _buildFallbackCover(theme),
                   ),
-                  
+
                   // Favorite button overlay
                   Positioned(
                     top: 8,
@@ -76,12 +65,14 @@ class BookCard extends ConsumerWidget {
                         ],
                       ),
                       child: IconButton(
-                        onPressed: () => ref.read(appStateProvider.notifier).toggleFavorite(book.id),
+                        onPressed: () => ref
+                            .read(appStateProvider.notifier)
+                            .toggleFavorite(book.id),
                         icon: Icon(
                           isFavorite ? Icons.favorite : Icons.favorite_border,
-                          color: isFavorite 
-                            ? Colors.red.shade500 
-                            : theme.colorScheme.onSurfaceVariant,
+                          color: isFavorite
+                              ? Colors.red.shade500
+                              : theme.colorScheme.onSurfaceVariant,
                           size: 20,
                         ),
                         iconSize: 20,
@@ -97,7 +88,7 @@ class BookCard extends ConsumerWidget {
                 ],
               ),
             ),
-            
+
             // 첵 정보
             Expanded(
               flex: 2,
@@ -132,40 +123,42 @@ class BookCard extends ConsumerWidget {
                         ],
                       ),
                     ),
-                    
+
                     const SizedBox(height: 8),
-                    
+
                     Row(
                       children: [
                         Row(
                           children: [
-                            if (book.isEpub)
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 6,
-                                  vertical: 2,
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 6,
+                                vertical: 2,
+                              ),
+                              decoration: BoxDecoration(
+                                color: theme.colorScheme.primary.withValues(
+                                  alpha: 0.1,
                                 ),
-                                decoration: BoxDecoration(
-                                  color: theme.colorScheme.primary.withValues(alpha: 0.1),
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: Text(
-                                  'EPUB',
-                                  style: theme.textTheme.bodySmall?.copyWith(
-                                    fontSize: 9,
-                                    fontWeight: FontWeight.w600,
-                                    color: theme.colorScheme.primary,
-                                  ),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Text(
+                                'EPUB',
+                                style: theme.textTheme.bodySmall?.copyWith(
+                                  fontSize: 9,
+                                  fontWeight: FontWeight.w600,
+                                  color: theme.colorScheme.primary,
                                 ),
                               ),
-                            if (book.isEpub) const SizedBox(width: 4),
+                            ),
+                            const SizedBox(width: 4),
                             Container(
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 8,
                                 vertical: 2,
                               ),
                               decoration: BoxDecoration(
-                                color: theme.colorScheme.surfaceContainerHighest,
+                                color:
+                                    theme.colorScheme.surfaceContainerHighest,
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               child: Text(
@@ -178,15 +171,17 @@ class BookCard extends ConsumerWidget {
                             ),
                           ],
                         ),
-                        
+
                         const Spacer(),
-                        
+
                         // Read button
                         SizedBox(
                           height: 32,
                           child: ElevatedButton(
                             onPressed: () {
-                              ref.read(appStateProvider.notifier).selectBook(book);
+                              ref
+                                  .read(appStateProvider.notifier)
+                                  .selectBook(book);
                               context.go('/book/${book.id}');
                             },
                             style: ElevatedButton.styleFrom(
@@ -209,6 +204,25 @@ class BookCard extends ConsumerWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildFallbackCover(ThemeData theme) {
+    return Container(
+      color: theme.colorScheme.surfaceContainerHighest,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(Icons.book, color: theme.colorScheme.primary, size: 48),
+          const SizedBox(height: 8),
+          Text(
+            'No Cover',
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: theme.colorScheme.onSurfaceVariant,
+            ),
+          ),
+        ],
       ),
     );
   }
