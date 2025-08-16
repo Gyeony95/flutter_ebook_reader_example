@@ -7,24 +7,28 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:ebook_reader_example/main.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
+  testWidgets('eBook Reader app smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
-
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
-
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
+    await tester.pumpWidget(
+      const ProviderScope(
+        child: EBookReaderApp(),
+      ),
+    );
+    
+    // Pump a few frames to let the initial layout complete
+    await tester.pump();
     await tester.pump();
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    // Verify that the app shows the library screen
+    expect(find.text('내 서재'), findsOneWidget);
+    
+    // The tab texts include counts, so we use textContaining
+    expect(find.textContaining('전체'), findsOneWidget);
+    expect(find.textContaining('즐겨찾기'), findsOneWidget);
   });
 }
