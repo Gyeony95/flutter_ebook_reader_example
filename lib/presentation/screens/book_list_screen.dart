@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../models/book.dart';
+import '../../domain/entities/book.dart';
 import '../widgets/book_card.dart';
-import '../providers/app_state_provider.dart';
+import '../providers/app_providers.dart';
 
 class BookListScreen extends ConsumerStatefulWidget {
   const BookListScreen({super.key});

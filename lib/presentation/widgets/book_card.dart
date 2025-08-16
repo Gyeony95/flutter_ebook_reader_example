@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:go_router/go_router.dart';
-import '../models/book.dart';
-import '../providers/app_state_provider.dart';
+import '../../domain/entities/book.dart';
+import '../providers/app_providers.dart';
 
 class BookCard extends ConsumerWidget {
   final Book book;

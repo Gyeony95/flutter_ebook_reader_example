@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../screens/book_list_screen.dart';
-import '../screens/book_reader_screen.dart';
-import '../models/book.dart';
+import '../presentation/screens/book_list_screen.dart';
+import '../presentation/screens/book_reader_screen.dart';
 
 class AppRouter {
   static const String home = '/';
