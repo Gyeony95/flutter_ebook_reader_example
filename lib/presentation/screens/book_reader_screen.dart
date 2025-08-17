@@ -186,8 +186,8 @@ class _BookReaderScreenState extends ConsumerState<BookReaderScreen>
               height: double.infinity,
               color: theme.colorScheme.surface,
               padding: EdgeInsets.only(
-                top: _showControls ? 120 : 40,
-                bottom: _showControls ? 140 : 40,
+                top: 40,
+                bottom: 40,
                 left: 24,
                 right: 24,
               ),

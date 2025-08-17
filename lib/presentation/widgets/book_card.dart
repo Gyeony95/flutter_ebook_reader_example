@@ -20,7 +20,7 @@ class BookCard extends ConsumerWidget {
       child: InkWell(
         onTap: () {
           ref.read(appStateProvider.notifier).selectBook(book);
-          context.go('/book/${book.id}');
+          context.push('/book/${book.id}');
         },
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -37,8 +37,8 @@ class BookCard extends ConsumerWidget {
                       color: theme.colorScheme.surfaceContainerHighest,
                     ),
                     child: book.coverImage != null
-                        ? Image.memory(
-                            book.coverImageBytes!,
+                        ? Image.asset(
+                            'assets/img_book.jpeg',
                             fit: BoxFit.cover,
                             width: double.infinity,
                             height: double.infinity,

@@ -12,11 +12,10 @@ class EpubDatasourceImpl implements EpubDatasource {
   Future<List<BookModel>> loadEpubBooks() async {
     try {
       final epubPaths = [
-        'assets/baegjoyi gog - gimnaeseong.epub',
-        'assets/bagmyeong - hanyongun.epub',
-        'assets/byeoggongmuhan - ihyoseog.epub',
-        'assets/mujeong - igwangsu.epub',
-        'assets/muyeongtab(Wu Ying Ta ) - hyeonjingeon.epub',
+        'assets/ggum - nadohyang.epub',
+        'assets/goeseung sinsu - yunbaegnam.epub',
+        'assets/gyeonghyi(Qiong Ji ) - nahyeseog.epub',
+        'assets/gyuweon - nahyeseog.epub',
       ];
 
       final List<BookModel> books = [];

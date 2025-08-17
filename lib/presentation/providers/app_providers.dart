@@ -26,7 +26,6 @@ final appInitializationProvider = FutureProvider<void>((ref) async {
   final books = results[0] as List<Book>;
   final favorites = results[1] as List<String>;
   final readingSettings = results[2] as ReadingSettings;
-
   ref.read(appStateProvider.notifier).updateBooks(books);
   ref.read(appStateProvider.notifier).updateFavorites(favorites);
   ref.read(appStateProvider.notifier).updateReadingSettings(readingSettings);
